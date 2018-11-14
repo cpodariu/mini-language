@@ -5,47 +5,49 @@ Language Specification:
       c. Decimal digits (0-9);
   Lexic:
       a.Special symbols, representing:
-	 - operators + - * / := < <= = >=
-	 - separators [ ] { }  : ; space
+	 - operators + - * / == < <= = >=
+	 - separators ( ) [ ] { }  : ; space
 	 - reserved words:
 			char else if int main read while write string float true false boolean not and or
       b.identifiers
 	   -a sequence of letters and  digits, such that the first charater is a letter; the rule is:
-	     identifier ::= letter | letter{letter}{digit}
+	     identifier ::= letter{(letter|digit)}
 	     letter ::= "A" | "B" | ... | "Z" | "a" | "b" | ... | "z" |
 	     digit ::= "0" | "1" |...| "9"
       c.constants
-	 1.integer - rule:
-	      noconst:=+no|-no|no
-	      no:=digit{no}
-	 2.character
-	     character:='letter'|'digit'
-	 3.string
-	      constchar:="string"
-	      string:=char{string}
-	      char:=letter|digit
+        1.integer - rule:
+            noconst=+no|-no|no
+            no:=digit{no}
+        2.character
+            character:='letter'|'digit'
+        3.string
+            constchar:="string"
+            string:=char{string}
+            char:=letter|digit
+        4.float
+            float:= digit{digit} "," digit{digit} 
 		  
  2.2 Syntax:
 	The words - predefined tokens are specified between " and ":	
 a) Sintactical rules:
     program ::= "main{" decllist ";" cmpdstmt "}"
-   decllist ::= declaration | declaration ";" decllist
-declaration ::= type " " IDENTIFIER; 
-  arraydec ::= type IDENTIFIER "[" nr "]"
-  type ::= "boolean" | "char" | "integer" | "string" | "float"
-  cmpdstmt ::= "{" stmtlist "}"
-   stmtlist ::= stmt | stmt ";" stmtlist
-       stmt ::= simplstmt | structstmt
-  simplstmt ::= assignstmt | iostmt
- assignstmt ::= IDENTIFIER " = " expression
- expression ::= expression ("+" | "-") term | term
-       term ::= term ("*" | "-") factor | factor
-     factor ::= "(" expression ")" | IDENTIFIER
-     iostmt ::= "read" | "write" "(" IDENTIFIER ")"
- structstmt ::= cmpdstmt | ifstmt | whilestmt
+    decllist ::= declaration | declaration ";" decllist
+    declaration ::= type " " IDENTIFIER; 
+    arraydec ::= type IDENTIFIER "[" nr "]"
+    type ::= "boolean" | "char" | "integer" | "string" | "float"
+    cmpdstmt ::= "{" stmtlist "}"
+    stmtlist ::= stmt | stmt ";" stmtlist
+    stmt ::= simplstmt | structstmt
+    simplstmt ::= assignstmt | iostmt
+    assignstmt ::= IDENTIFIER " = " expression
+    expression ::= expression ("+" | "-") term | term
+    term ::= term ("*" | "/") factor | factor
+    factor ::= "(" expression ")" | IDENTIFIER
+    iostmt ::= ("read" | "write") "(" IDENTIFIER ")"
+    structstmt ::= cmpdstmt | ifstmt | whilestmt
     ifstmt  = "if" "(" condition ")" cmpdstmt [ "else" "{" cmpdstmt "}" ]
-  whilestmt  = "while" "(" condition ")" cmpdstmt
-  condition  = expression RELATION expression
+    whilestmt  = "while" "(" condition ")" cmpdstmt
+    condition  = expression RELATION expression
   
 b) lexical rules:
  IDENTIFIER ::= letter | letter{letter}{digit}
@@ -104,8 +106,7 @@ Codification:
 -------------------------
 | * 		|   22  |
 -------------------------
-| / 		|   33  |
--------------------------
+| / 		|   23  |
 -------------------------
 | (		|   24  |
 -------------------------
